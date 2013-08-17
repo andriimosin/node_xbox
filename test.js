@@ -1,8 +1,18 @@
-var arDrone = require('ar-drone');
-var XboxController = require('./lib/xbox')
+// var arDrone = require('ar-drone');
+// var client  = arDrone.createClient();
 
-var client  = arDrone.createClient();
+var XboxController = require('./lib/xbox')
 var xbox = new XboxController
+
+var arDrone  = require("ar-drone"),
+    client   = arDrone.createClient(),
+    angle    = 64,
+    speed    = 0.4;
+
+client.config('control:altitude_max', 100000)
+client.config('control:control_vz_max', 1000)
+client.config('control:control_yaw', 4.0)
+client.config('control:euler_angle_max', 0.3)
 
 xbox.on('a:press', function (key) {
   console.log(key + ' press');
@@ -32,6 +42,10 @@ xbox.on('left:move', function(position){
 })
 
 xbox.on('right:move', function(position){
-  console.log('right:move', position)
+  if (position.y <= 128) {
+    console.log("front:", (128 - position.y) / angle * speed);
+    client.front((128 - position.y) / angle * speed);
+    console.log('right:move', position);
+  }
 })
 
