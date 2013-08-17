@@ -1,8 +1,5 @@
-// var arDrone = require('ar-drone');
-// var client  = arDrone.createClient();
-
-var XboxController = require('./lib/xbox')
-var xbox = new XboxController
+var XboxController = require('./lib/xbox');
+var xbox = new XboxController();
 
 var arDrone  = require("ar-drone"),
     client   = arDrone.createClient(),
@@ -29,27 +26,46 @@ xbox.on('b:release', function (key) {
 });
 
 
-xbox.on('lefttrigger', function(position){
-  console.log('lefttrigger', position)
-})
+// xbox.on('lefttrigger', function(position){
+//   console.log('lefttrigger', position)
+// })
 
-xbox.on('righttrigger', function(position){
-  console.log('righttrigger', position)
-})
+// xbox.on('righttrigger', function(position){
+//   console.log('righttrigger', position)
+// })
 
 xbox.on('left:move', function(position){
   console.log('left:move', position)
-})
+});
 
 xbox.on('left:move', function(position){
-  if (position.y <= -10000) {
-    console.log("front:", (128 - position.y) / angle * speed);
-    client.front((position.y) / angle * speed);
-    console.log('right:move', position);
+
+  // fly forward-back
+  // max 32767
+  // min 32767
+
+  var deadArea = 10000;
+  
+  // client.front(speed);
+  // client.back(speed);
+
+  if (position.y <= -deadArea) {
+    console.log("front:", (position.y) / angle * speed);
+    client.front(Math.abs(position.y) / angle * speed);
+  } else if (position.y > deadArea) {
+    console.log("back:", (position.y) / angle * speed);
+    client.back(Math.abs(position.y) / angle * speed);
   }
-  else if (position.y > -10000 )
-    client.back((position.y) / angle * speed);
-})
+
+  // if (position.x < 0) {
+  //   console.log("left:", (position.x) / angle * speed);
+  //   client.left(Math.abs(position.x) / angle * speed);
+  // }
+  // if (position.x >= 0) {
+  //   console.log("right:", (position.x) / angle * speed);
+  //   client.right(Math.abs(position.x) / angle * speed);
+  // }
+});
 
 // if (type == "left" && value.x <= 128) {
 //     console.log("left:", (128 - value.x) / angle * speed);
@@ -58,4 +74,3 @@ xbox.on('left:move', function(position){
 //     console.log("right:", (value.x - 128) / angle * speed);
 //     client.right((value.x - 128) / angle * speed);
 // }
-
