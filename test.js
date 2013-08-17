@@ -44,33 +44,51 @@ xbox.on('left:move', function(position){
   // max 32767
   // min 32767
 
-  var deadArea = 10000;
-  
+  // var deadArea = 10000;
+
   // client.front(speed);
   // client.back(speed);
 
-  if (position.y <= -deadArea) {
-    console.log("front:", (position.y) / angle * speed);
-    client.front(Math.abs(position.y) / angle * speed);
-  } else if (position.y > deadArea) {
-    console.log("back:", (position.y) / angle * speed);
-    client.back(Math.abs(position.y) / angle * speed);
-  }
+  if (position.x <= 64) {
+    console.log("front:", (position.x) / angle * speed);
+    client.front((64 - position.x) / angle * speed);
+  } else if (position.x > 64) {
+    console.log("back:", (position.x) / angle * speed);
+    client.back((64 - position.x) / angle * speed);
+  };
 
-  // if (position.x < 0) {
-  //   console.log("left:", (position.x) / angle * speed);
-  //   client.left(Math.abs(position.x) / angle * speed);
-  // }
-  // if (position.x >= 0) {
-  //   console.log("right:", (position.x) / angle * speed);
-  //   client.right(Math.abs(position.x) / angle * speed);
-  // }
+  if (position.y <= 64) {
+    console.log("front:", (position.y) / angle * speed);
+    client.front((64 - position.y) / angle * speed);
+  } else if (position.y > 64) {
+    console.log("back:", (position.y) / angle * speed);
+    client.back((64 - position.y) / angle * speed);
+  };
+
 });
 
-// if (type == "left" && value.x <= 128) {
-//     console.log("left:", (128 - value.x) / angle * speed);
-//     client.left((128 - value.x) / angle * speed);
-// } else if (type == "left" && value.x > 128) {
-//     console.log("right:", (value.x - 128) / angle * speed);
-//     client.right((value.x - 128) / angle * speed);
+
+// xbox.on('right:move', function(position){
+  // if (position.y <= 64) {
+  //     console.log("up:", (64 - position.y) / angle * speed);
+  //     client.up((64 - position.y) / angle * speed);
+  // } else if (type == "right" && position.y > 64) {
+  //     console.log("down:", (position.y - 64) / angle * speed);
+  //     client.down((position.y - 64) / angle * speed);
+  // }
+
+//   if (position.x <= 64) {
+//       console.log("counterclockwise:", (64 - position.x) / angle * speed);
+//       client.counterClockwise((64 - position.x) / angle * speed);
+//   } else if (position.x > 64) {
+//       console.log("clockwise:", (position.x - 64) / angle * speed);
+//       client.clockwise((position.x - 64) / angle * speed);
+//   }
+// });
+// if (type == "left" && value.x <= 64) {
+//     console.log("left:", (64 - value.x) / angle * speed);
+//     client.left((64 - value.x) / angle * speed);
+// } else if (type == "left" && value.x > 64) {
+//     console.log("right:", (value.x - 64) / angle * speed);
+//     client.right((value.x - 64) / angle * speed);
 // }
