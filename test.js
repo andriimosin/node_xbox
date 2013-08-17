@@ -41,11 +41,21 @@ xbox.on('left:move', function(position){
   console.log('left:move', position)
 })
 
-xbox.on('right:move', function(position){
-  if (position.y <= 128) {
+xbox.on('left:move', function(position){
+  if (position.y <= -10000) {
     console.log("front:", (128 - position.y) / angle * speed);
-    client.front((128 - position.y) / angle * speed);
+    client.front((position.y) / angle * speed);
     console.log('right:move', position);
   }
+  else if (position.y > -10000 )
+    client.back((position.y) / angle * speed);
 })
+
+// if (type == "left" && value.x <= 128) {
+//     console.log("left:", (128 - value.x) / angle * speed);
+//     client.left((128 - value.x) / angle * speed);
+// } else if (type == "left" && value.x > 128) {
+//     console.log("right:", (value.x - 128) / angle * speed);
+//     client.right((value.x - 128) / angle * speed);
+// }
 
