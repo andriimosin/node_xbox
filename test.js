@@ -11,6 +11,9 @@ client.config('control:control_vz_max', 1000)
 client.config('control:control_yaw', 4.0)
 client.config('control:euler_angle_max', 0.3)
 
+client.config('control:outdoor', false)
+client.config('control:flight_without_shell', false)
+
 xbox.on('a:press', function (key) {
   console.log(key + ' press');
   client.takeoff();
@@ -54,7 +57,7 @@ xbox.on('left:move', function(position){
     client.front((64 - position.x) / angle * speed);
   } else if (position.x > 64) {
     console.log("back:", (position.x) / angle * speed);
-    client.back((64 - position.x) / angle * speed);
+    client.back((position.x - 64) / angle * speed);
   };
 
   if (position.y <= 64) {
@@ -62,11 +65,16 @@ xbox.on('left:move', function(position){
     client.front((64 - position.y) / angle * speed);
   } else if (position.y > 64) {
     console.log("back:", (position.y) / angle * speed);
-    client.back((64 - position.y) / angle * speed);
+    client.back((position.y - 64) / angle * speed);
   };
 
 });
 
+xbox.on('lefttrigger', function(position){
+  console.log('lefttrigger', position)
+  // client.animate(wave, 15)
+  client.wave;
+})
 
 // xbox.on('right:move', function(position){
   // if (position.y <= 64) {
