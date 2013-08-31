@@ -13,7 +13,7 @@ var server = http.createServer(function(req, res) {
   require("fs").createReadStream("index.html").pipe(res);
 });
 
-client.calibrate(0)
+client.calibrate(1);
 
 drone.listen(server);
 server.listen(5555);
@@ -24,8 +24,8 @@ client.config('control:control_vz_max', 1000);
 client.config('control:control_yaw', 4.0);
 client.config('control:euler_angle_max', 0.3);
 
-client.config('control:outdoor', false)
-client.config('control:flight_without_shell', false)
+client.config('control:outdoor', false);
+client.config('control:flight_without_shell', false);
 
 xbox.on('a:press', function (key) {
   console.log(key + ' press');
@@ -39,7 +39,6 @@ xbox.on('b:press', function (key) {
     client.stop();
   });
 });
-
 
 xbox.on('left:move', function(position){
 
@@ -81,24 +80,47 @@ xbox.on('right:move', function(position) {
     client.down(val);
   }
 
-  if (position.x <= 30000) {
-    var val = (dead - position.x) / angle * speed;
-    console.log("counterclockwise:", val, position);
-    client.counterClockwise(val);
-  } else if (position.x > 30000) {
-    var val = (position.x - dead) / angle * speed;
-    console.log("clockwise:", dead, position);
-    client.clockwise(val);
-  }
+  // if (position.x <= 30000) {
+  //   var val = (dead - position.x) / angle * speed;
+  //   console.log("counterclockwise:", val, position);
+  //   client.counterClockwise(val);
+  // } else if (position.x > 30000) {
+  //   var val = (position.x - dead) / angle * speed;
+  //   console.log("clockwise:", dead, position);
+  //   client.clockwise(val);
+  // }
+});
+
+xbox.on('leftshoulder:press', function(){
+  client.counterClockwise(1);
+    console.log('leftshoulder:press');
+
+});
+
+xbox.on('leftshoulder:release', function(){
+  client.counterClockwise(0);
+    console.log('leftshoulder:release');
+
+});
+
+xbox.on('rightshoulder:press', function(){
+  client.clockwise(1);
+    console.log('rightshoulder:press');
+
+});
+
+xbox.on('rightshoulder:release', function(){
+  client.clockwise(0);
+    console.log('rightshoulder:release');
+
 });
 
 xbox.on('lefttrigger', function(position){
-  console.log('lefttrigger', position)
+  console.log('lefttrigger', position);
   client.animate('flipLeft', 1500);
-})
+});
 
 xbox.on('righttrigger', function(position){
-  console.log('righttrigger', position)
+  console.log('righttrigger', position);
   client.animate('wave', 1500);
-})
-
+});
