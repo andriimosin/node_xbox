@@ -13,7 +13,7 @@ var server = http.createServer(function(req, res) {
   require("fs").createReadStream("index.html").pipe(res);
 });
 
-client.calibrate(0)
+client.calibrate(1)
 
 drone.listen(server);
 server.listen(5555);
@@ -24,8 +24,8 @@ client.config('control:control_vz_max', 1000);
 client.config('control:control_yaw', 4.0);
 client.config('control:euler_angle_max', 0.3);
 
-client.config('control:outdoor', false)
-client.config('control:flight_without_shell', false)
+client.config('control:outdoor', true);
+client.config('control:flight_without_shell', true);
 
 xbox.on('a:press', function (key) {
   console.log(key + ' press');
@@ -94,11 +94,11 @@ xbox.on('right:move', function(position) {
 
 xbox.on('lefttrigger', function(position){
   console.log('lefttrigger', position)
-  client.animate('flipLeft', 1500);
+  client.animate('flipLeft', 500);
 })
 
 xbox.on('righttrigger', function(position){
   console.log('righttrigger', position)
-  client.animate('wave', 1500);
+  client.animate('wave', 2500);
 })
 
