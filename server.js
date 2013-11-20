@@ -13,11 +13,10 @@ var server = http.createServer(function(req, res) {
   require("fs").createReadStream("index.html").pipe(res);
 });
 
-client.calibrate(1)
+client.calibrate(0);
 
 drone.listen(server);
 server.listen(5555);
-
 
 client.config('control:altitude_max', 100000);
 client.config('control:control_vz_max', 1000);
@@ -25,7 +24,7 @@ client.config('control:control_yaw', 4.0);
 client.config('control:euler_angle_max', 0.3);
 
 client.config('control:outdoor', true);
-client.config('control:flight_without_shell', true);
+client.config('control:flight_without_shell', false);
 
 xbox.on('a:press', function (key) {
   console.log(key + ' press');
@@ -36,10 +35,9 @@ xbox.on('b:press', function (key) {
   console.log(key + ' press');
   client.land(function(){
     console.log('landed');
-    client.stop();
+    // client.stop();
   });
 });
-
 
 xbox.on('left:move', function(position){
 
@@ -50,7 +48,8 @@ xbox.on('left:move', function(position){
     var val = (dead - position.x) / angle * speed;
     console.log("left:", val, position);
     client.left(val);
-  } else if (position.x > step) {
+  }
+  else if (position.x > step) {
     var val = (position.x - dead) / angle * speed;
     console.log("right:", val, position);
     client.right(val);
@@ -60,7 +59,8 @@ xbox.on('left:move', function(position){
     var val = (dead - position.y) / angle * speed;
     console.log("front:", val, position);
     client.front(val);
-  } else if (position.y > step) {
+  }
+  else if (position.y > step) {
     var val = (position.y - dead) / angle * speed;
     console.log("back:", val, position);
     client.back(val);
@@ -75,30 +75,42 @@ xbox.on('right:move', function(position) {
     var val = (dead - position.y) / angle * speed;
     console.log("up:", val, position);
     client.up(val);
-  } else if (position.y > dead) {
+  }
+  else if (position.y > dead) {
     var val = (position.y - dead) / angle * speed;
     console.log("down:", val, position);
     client.down(val);
   }
+});
 
-  if (position.x <= 30000) {
-    var val = (dead - position.x) / angle * speed;
-    console.log("counterclockwise:", val, position);
-    client.counterClockwise(val);
-  } else if (position.x > 30000) {
-    var val = (position.x - dead) / angle * speed;
-    console.log("clockwise:", dead, position);
-    client.clockwise(val);
-  }
+xbox.on('leftshoulder:press', function(){
+  client.clockwise(-1);
+  console.log('leftshoulder:press');
+});
+
+xbox.on('leftshoulder:release', function(){
+  client.clockwise(0);
+  client.stop();
+  console.log('leftshoulder:release');
+});
+
+xbox.on('rightshoulder:press', function(){
+  client.clockwise(1);
+  console.log('rightshoulder:press');
+});
+
+xbox.on('rightshoulder:release', function(){
+  client.clockwise(0);
+  client.stop();
+  console.log('rightshoulder:release');
 });
 
 xbox.on('lefttrigger', function(position){
-  console.log('lefttrigger', position)
+  console.log('lefttrigger', position);
   client.animate('flipLeft', 500);
-})
+});
 
 xbox.on('righttrigger', function(position){
-  console.log('righttrigger', position)
+  console.log('righttrigger', position);
   client.animate('wave', 2500);
-})
-
+});
